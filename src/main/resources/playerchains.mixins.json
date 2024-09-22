@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "net.st3v1k.playerchains.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerListMixin",
+    "PortalProcessorMixin",
+    "ServerGamePacketListenerImplAccessor"
+  ],
+  "client": [
+    "DoubleJumpMixin",
+    "EntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

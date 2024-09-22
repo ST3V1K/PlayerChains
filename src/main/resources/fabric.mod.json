@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "playerchains",
+  "version": "${version}",
+  "name": "PlayerChains",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/playerchains/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.st3v1k.playerchains.PlayerChains"
+    ],
+    "cardinal-components": [
+      "net.st3v1k.playerchains.PlayerChainsComponents"
+    ]
+  },
+  "mixins": [
+    "playerchains.mixins.json"
+  ],
+  "custom": {
+    "cardinal-components": [
+      "playerchains:chain"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.5",
+    "minecraft": "~1.20.4",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}
