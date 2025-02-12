@@ -21,7 +21,7 @@ public class PlayerChainRenderer {
 
     public static void renderConnections(MatrixStack stack, Entity entity) {
         if (entity instanceof PlayerEntity player) {
-            float pt = MinecraftClient.getInstance().getTickDelta();
+            float pt = MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(true);
             VertexConsumerProvider.Immediate buffers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
             World level = player.getWorld();
             ChainComponent var6 = PlayerChainsComponents.CHAIN.get(player);
@@ -87,7 +87,7 @@ public class PlayerChainRenderer {
         float u = f * m;
         float v = g > 0.0F ? g * m * m : g - g * (1.0F - m) * (1.0F - m);
         float w = h * m;
-        vertexConsumer.vertex(positionMatrix, u - k, v + j, w + l).color(r, s, t, 1.0F).light(p).next();
-        vertexConsumer.vertex(positionMatrix, u + k, v + i - j, w - l).color(r, s, t, 1.0F).light(p).next();
+        vertexConsumer.vertex(positionMatrix, u - k, v + j, w + l).color(r, s, t, 1.0F).light(p);
+        vertexConsumer.vertex(positionMatrix, u + k, v + i - j, w - l).color(r, s, t, 1.0F).light(p);
     }
 }

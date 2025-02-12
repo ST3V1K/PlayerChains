@@ -1,12 +1,8 @@
 package net.st3v1k.playerchains.mixin;
 
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ElytraItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.world.World;
 import net.st3v1k.playerchains.ChainComponent;
 import net.st3v1k.playerchains.PlayerChains;
@@ -19,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
 
-@Mixin({ClientPlayerEntity.class})
+@Mixin(ClientPlayerEntity.class)
 public abstract class DoubleJumpMixin {
     @Unique
     private boolean playerchains$jumpingLastTick = false;
@@ -30,17 +26,11 @@ public abstract class DoubleJumpMixin {
     )
     private void playerchains$tickMovement(CallbackInfo info) {
         ClientPlayerEntity player = (ClientPlayerEntity) (Object) this;
-        if (!player.isOnGround() && !player.isClimbing() && !this.playerchains$jumpingLastTick && player.input.jumping && !player.getAbilities().flying && this.canPerformJump(player)) {
+        if (!player.isOnGround() && !player.isClimbing() && !this.playerchains$jumpingLastTick && player.input.playerInput.jump() && !player.getAbilities().flying && this.canPerformJump(player)) {
             player.jump();
         }
 
-        this.playerchains$jumpingLastTick = player.input.jumping;
-    }
-
-    @Unique
-    private boolean couldFly(ClientPlayerEntity player) {
-        ItemStack chestItemStack = player.getEquippedStack(EquipmentSlot.CHEST);
-        return chestItemStack.getItem() == Items.ELYTRA && ElytraItem.isUsable(chestItemStack);
+        this.playerchains$jumpingLastTick = player.input.playerInput.jump();
     }
 
     @Unique
@@ -62,6 +52,6 @@ public abstract class DoubleJumpMixin {
             }
         }
 
-        return canDoubleJump && !this.couldFly(player) && !player.isFallFlying() && !player.hasVehicle() && !player.isTouchingWater() && !player.hasStatusEffect(StatusEffects.LEVITATION);
+        return canDoubleJump && !player.canGlide() && !player.isTouchingWater() && !player.hasStatusEffect(StatusEffects.LEVITATION);
     }
 }

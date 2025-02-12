@@ -1,24 +1,25 @@
 package net.st3v1k.playerchains;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import dev.onyxstudios.cca.api.v3.component.tick.ClientTickingComponent;
-import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.st3v1k.playerchains.mixin.ServerGamePacketListenerImplAccessor;
 import org.jetbrains.annotations.NotNull;
+import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.ComponentProvider;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
+import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
 import java.util.Set;
 import java.util.UUID;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ChainComponent implements AutoSyncedComponent, ClientTickingComponent, ServerTickingComponent {
+public class ChainComponent implements AutoSyncedComponent, ClientTickingComponent, ServerTickingComponent, Component {
     private final PlayerEntity player;
     private final Set<UUID> connections = new ObjectOpenHashSet<>();
 
@@ -84,17 +85,19 @@ public class ChainComponent implements AutoSyncedComponent, ClientTickingCompone
 
     }
 
-    public void readFromNbt(NbtCompound tag) {
+    @Override
+    public void readFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
         this.connections.clear();
 
-        for (String key : tag.getKeys()) {
+        for (String key : nbt.getKeys()) {
             this.connections.add(UUID.fromString(key));
         }
     }
 
-    public void writeToNbt(NbtCompound tag) {
+    @Override
+    public void writeToNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
         for (UUID uuid : this.connections) {
-            tag.putBoolean(uuid.toString(), true);
+            nbt.putBoolean(uuid.toString(), true);
         }
     }
 
@@ -104,7 +107,7 @@ public class ChainComponent implements AutoSyncedComponent, ClientTickingCompone
 
     public void serverTick() {
         if (this.player instanceof ServerPlayerEntity serverPlayer) {
-            ((ServerGamePacketListenerImplAccessor) serverPlayer.networkHandler).setFloatingTicks(0);
+            serverPlayer.networkHandler.floatingTicks = 0;
         }
     }
 }

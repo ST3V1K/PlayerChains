@@ -1,6 +1,7 @@
 package net.st3v1k.playerchains.mixin;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -22,7 +23,7 @@ public abstract class PlayerListMixin {
             method = {"respawnPlayer"},
             at = {@At("RETURN")}
     )
-    public void respawn(ServerPlayerEntity serverPlayer, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> cir) {
+    public void respawn(ServerPlayerEntity serverPlayer, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayerEntity> cir) {
         ServerPlayerEntity player = cir.getReturnValue();
         ServerWorld level = player.getServerWorld();
         Set<UUID> visited = new ObjectOpenHashSet<>();
@@ -52,7 +53,7 @@ public abstract class PlayerListMixin {
             }
 
             if (currentPlayer != player) {
-                currentPlayer.teleport((ServerWorld) player.getWorld(), player.getX(), player.getY(), player.getZ(), Set.of(), player.getYaw(), player.getPitch());
+                currentPlayer.teleport((ServerWorld) player.getWorld(), player.getX(), player.getY(), player.getZ(), Set.of(), player.getYaw(), player.getPitch(), false);
             }
         }
     }

@@ -4,8 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "PlayerListMixin",
-    "PortalProcessorMixin",
-    "ServerGamePacketListenerImplAccessor"
+    "PortalProcessorMixin"
   ],
   "client": [
     "DoubleJumpMixin",
